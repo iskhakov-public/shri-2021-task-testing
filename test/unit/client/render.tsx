@@ -16,17 +16,22 @@ import { MockApi, MockCartApi } from "./api.mock";
 import "@testing-library/jest-dom";
 import "@testing-library/jest-dom/extend-expect";
 
-const api = new MockApi("/hw/store");
-const cart = new MockCartApi();
-const initedStore = initStore(api, cart);
+type RenderConfig = {
+  routerOnly?: boolean
+  api?: MockApi
+  cart?: MockCartApi
+}
 
-export function render(path: string, config = { routerOnly: false }) {
+export function render(path: string, config: RenderConfig = {}) {
+  const { routerOnly = false, api = new MockApi("hw/store"), cart = new MockCartApi()} = config;
+  const initedStore = initStore(api, cart);
+
+
   const history = createMemoryHistory({
     initialEntries: [path],
     initialIndex: 0,
   });
 
-  const { routerOnly } = config;
   return reactTestRender(
     <Router history={history}>
       <Provider store={initedStore}>
@@ -45,4 +50,16 @@ export function render(path: string, config = { routerOnly: false }) {
       </Provider>
     </Router>
   );
+}
+
+export function renderWithRedux(component: React.ComponentElement<any, any>) {
+  const api = new MockApi("/hw/store");
+  const cart = new MockCartApi();
+  const initedStore = initStore(api, cart);
+
+  return reactTestRender(
+    <Provider store={initedStore}>
+      {component}
+    </Provider>
+  )
 }
