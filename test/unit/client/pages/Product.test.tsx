@@ -4,9 +4,10 @@ import {
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event"
-import { products } from "../api.mock";
+import { MockCartApi, products } from "../api.mock";
 import { render as routeRender, renderWithRedux } from "../render";
 import { ProductDetails } from "../../../../src/client/components/ProductDetails";
+import { CartItem, CartState } from "../../../../src/common/types";
 
 describe("Product.tsx", () => {
   it("Detailed view contain all info about product ", () => {
@@ -34,31 +35,25 @@ describe("Product.tsx", () => {
   })
 
   it("When one item in the cart, adding more items increases counter", async () => {
+    const product = products[1]
+    const cartAPI = new MockCartApi()
+        const cartStateObject: CartItem = {
+            count: 1,
+            price: product.price,
+            name: product.name
+        }
+        const cartState: CartState = {
+            "1": cartStateObject
+        }
+        cartAPI.setState(cartState)
     // Render page with location /catalog/1
-    let { getByRole, queryByText, getAllByTestId } = routeRender("/catalog/1");
+    let { getByRole, getAllByTestId, queryByText } = routeRender("/catalog/2", { cart: cartAPI });
 
     // Wait till Loading text is disappeared
     await waitForElementToBeRemoved(() => queryByText(/loading/i));
 
-    // We must have 'Cart' in navbar, not 'Cart (1)'
-    expect(getByRole("link", { name: /cart/i })).not.toHaveTextContent("(")
-
-    // Click 'Add to Cart' button
-    userEvent.click(getByRole('button', { name: /add to cart/i }))
-
     // Check that we have 'Cart (1)' in navbar
-    await expect(getByRole("link", { name: /cart/i })).toHaveTextContent("(1)")
-
-    // Go to Catalog page, by clicking the nav a
-    userEvent.click(getByRole("link", { name: /catalog/i }))
-
-    // Wait till Loading is disappeared
-    await waitForElementToBeRemoved(() => queryByText(/loading/i));
-
-    // Go to product page with testid 2 (previously we had testid 1)
-    userEvent.click(getAllByTestId("2")[0].querySelector("a"))
-
-    await waitForElementToBeRemoved(() => queryByText(/loading/i));
+    expect(getByRole("link", { name: /cart/i })).toHaveTextContent("(1)")
 
     // Click 'Add to Cart'
     userEvent.click(getByRole('button', { name: /add to cart/i }))

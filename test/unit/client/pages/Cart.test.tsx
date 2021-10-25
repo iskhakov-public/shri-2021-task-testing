@@ -82,7 +82,6 @@ describe("Cart.tsx", () => {
     it("Empty cart must have link to catalog", () => {
         let { getByRole } = routeRender("/cart/", { routerOnly: true });
         getByRole("link", {name: /catalog/i})
-        screen.logTestingPlaygroundURL()
     })
 
 })
