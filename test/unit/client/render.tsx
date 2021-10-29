@@ -13,7 +13,6 @@ import { Delivery } from "../../../src/client/pages/Delivery";
 import { Contacts } from "../../../src/client/pages/Contacts";
 import { Cart } from "../../../src/client/pages/Cart";
 import { MockApi, MockCartApi } from "./api.mock";
-import "@testing-library/jest-dom";
 import "@testing-library/jest-dom/extend-expect";
 
 type RenderConfig = {
