@@ -34,33 +34,33 @@ describe("Product.tsx", () => {
     getByText(/item in cart/i)
   })
 
-  it("When one item in the cart, adding more items increases counter", async () => {
-    const product = products[1]
-    const cartAPI = new MockCartApi()
-        const cartStateObject: CartItem = {
-            count: 1,
-            price: product.price,
-            name: product.name
-        }
-        const cartState: CartState = {
-            "1": cartStateObject
-        }
-        cartAPI.setState(cartState)
-    // Render page with location /catalog/1
-    let { getByRole, getAllByTestId, queryByText } = routeRender("/catalog/2", { cart: cartAPI });
+  // it("When one item in the cart, adding more items increases counter", async () => {
+  //   const product = products[1]
+  //   const cartAPI = new MockCartApi()
+  //       const cartStateObject: CartItem = {
+  //           count: 1,
+  //           price: product.price,
+  //           name: product.name
+  //       }
+  //       const cartState: CartState = {
+  //           "1": cartStateObject
+  //       }
+  //       cartAPI.setState(cartState)
+  //   // Render page with location /catalog/1
+  //   let { getByRole, getAllByTestId, queryByText } = routeRender("/catalog/2", { cart: cartAPI });
 
-    // Wait till Loading text is disappeared
-    await waitForElementToBeRemoved(() => queryByText(/loading/i));
+  //   // Wait till Loading text is disappeared
+  //   await waitForElementToBeRemoved(() => queryByText(/loading/i));
 
-    // Check that we have 'Cart (1)' in navbar
-    expect(getByRole("link", { name: /cart/i })).toHaveTextContent("(1)")
+  //   // Check that we have 'Cart (1)' in navbar
+  //   expect(getByRole("link", { name: /cart/i })).toHaveTextContent("(1)")
 
-    // Click 'Add to Cart'
-    userEvent.click(getByRole('button', { name: /add to cart/i }))
+  //   // Click 'Add to Cart'
+  //   userEvent.click(getByRole('button', { name: /add to cart/i }))
 
-    // Now we must have 'Cart (2)'
-    await expect(getByRole("link", { name: /cart/i })).toHaveTextContent("(2)")
-  })
+  //   // Now we must have 'Cart (2)'
+  //   await expect(getByRole("link", { name: /cart/i })).toHaveTextContent("(2)")
+  // })
 
 
 });
