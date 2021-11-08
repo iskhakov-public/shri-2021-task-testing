@@ -106,7 +106,7 @@ describe('Каталог', async function () {
         await this.browser.assertView('plain', '.Product', {
             compositeImage: true,
             // allowViewportOverflow: true,
-            screenshotDelay: 0.3,
+            // screenshotDelay: 0.3,
             // ignoreElements: ['.card-title', '.card-text', '.card-link']
         })
     }
@@ -123,7 +123,7 @@ describe('Каталог', async function () {
         await this.browser.assertView('plain', '#root', {
             compositeImage: true,
             // allowViewportOverflow: true,
-            screenshotDelay: 0.3,
+            // screenshotDelay: 0.3,
             // ignoreElements: ['.card-title', '.card-text', '.card-link']
         })
     }
@@ -175,22 +175,24 @@ describe('Общие требования', async function () {
     })
 
     it('навигация мобильная (гамбургер)', async function () {
-        const { height } = await this.browser.getWindowSize();
+        const { height, width } = await this.browser.getWindowSize();
         await this.browser.setWindowSize(520, Math.max(height, 1440));
         await this.browser.url('/hw/store');
         const button = await this.browser.$(".Application-Toggler")
         await button.click()
         await this.browser.assertView('mobile', 'div.container:nth-child(1)')
+        await this.browser.setWindowSize(width, height);
     })
 
     it('навигация мобильная (закрытие гамбургера при нажатии)', async function () {
-        const { height } = await this.browser.getWindowSize();
+        const { height, width } = await this.browser.getWindowSize();
         await this.browser.setWindowSize(520, Math.max(height, 1440));
         await this.browser.url('/hw/store');
         const button = await this.browser.$(".Application-Toggler")
         await button.click()
         await button.click()
         await this.browser.assertView('mobile', 'div.container:nth-child(1)')
+        await this.browser.setWindowSize(width, height);
     })
 
     it('навигация мобильная (закрытие по клику на ссылке)', async function () {
